@@ -1,10 +1,11 @@
 //
 // Created by phoenix559 on 9/3/26.
 //
-#include "../Lab 1/MyArray.h"
+
 
 #ifndef LAB_2_THREEDARRAY_H
 #define LAB_2_THREEDARRAY_H
+#include "../Lab 1/MyArray.h"
 class ThreeDArray {
 private:
     int slice = 0;

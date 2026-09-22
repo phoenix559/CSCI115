@@ -10,7 +10,7 @@ add_subdirectory("Lab 2")
 
 # Future labs (uncomment as you create the folders and their CMakeLists.txt files)
 # add_subdirectory("Lab 3")
-# add_subdirectory("Lab 4")
+add_subdirectory("Lab 4")
 # add_subdirectory("Lab 5")
 # add_subdirectory("Lab 6")
 # add_subdirectory("Lab 7")
