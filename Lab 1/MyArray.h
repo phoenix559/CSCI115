@@ -9,7 +9,7 @@
 
 
 class MyArray {
-private:
+protected:
     int* data = nullptr;
     int length = 0; // current size of the array
     int capacity = 0; // preset capacity
@@ -47,16 +47,24 @@ public:
 
     // other
     int count_values(int value);
+    void print();
+    void resize(int amount_add);
+    void resize_double ();
+
+    // sorting
     void selection_sort();
     void insertion_sort();
     void bubble_sort();
     void reverse();
+    bool isSorted (int direction, bool allow_duplicates);
+
+    // copying
     MyArray subarray(int start, int end);
     MyArray unique();
-    void print();
+
+    //overloading
     int& operator[](int index); // recommended addition from gemini for "more natural array syntax"
     MyArray& operator=(const MyArray& other);
-    void resize(int amount_add);
-    void resize_double ();
+
 };
 #endif //LAB_1_MYARRAY_H

@@ -3,7 +3,7 @@
 
 #include "MyArray.h"
 
-
+/*
 void unitTest() {
     std::cout <<"Testing default constructor" << std::endl;
     MyArray arr = MyArray();
@@ -172,7 +172,7 @@ void unitTest() {
     }
 
 
-}
+}*/
 
 #include <stdexcept>
 
@@ -250,16 +250,188 @@ void testExceptions() {
     std::cout << "\nAll exception tests completed safely without crashing." << std::endl;
 }
 
-void selection_sort(MyArray*);
-void insert_sort(int*);
-void bubble_sort(int*);
 
-void selection_sort(MyArray* arr) {
-    int length = arr->get_length();
-    for (int i = 0; i < length; i++) {}
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+
+// Case 1: Random array of size n
+MyArray generate_case1_array(int n) {
+    MyArray case1_array(n, 0);
+    for (int i = 0; i < n; i++) {
+        case1_array[i] = std::rand() % 100000;
+    }
+    return case1_array;
 }
+
+// Case 2: Sorted array of size n (0 to n - 1)
+MyArray generate_case2_array(int n) {
+    MyArray case2_array(n, 0);
+    for (int i = 0; i < n; i++) {
+        case2_array[i] = i;
+    }
+    return case2_array;
+}
+
+// Case 3: 90% sorted array (uses Case 2 baseline, swaps 10%)
+MyArray generate_case3_array(int n) {
+    MyArray case3_array = generate_case2_array(n);
+    int total_swaps = n / 10;
+    for (int i = 0; i < total_swaps; i++) {
+        int index1 = std::rand() % n;
+        int index2 = std::rand() % n;
+        int temp = case3_array[index1];
+        case3_array[index1] = case3_array[index2];
+        case3_array[index2] = temp;
+    }
+    return case3_array;
+}
+
+// Case 4: 50% sorted array (uses Case 2 baseline, swaps 50%)
+MyArray generate_case4_array(int n) {
+    MyArray case4_array = generate_case2_array(n);
+    int total_swaps = n / 2;
+    for (int i = 0; i < total_swaps; i++) {
+        int index1 = std::rand() % n;
+        int index2 = std::rand() % n;
+        int temp = case4_array[index1];
+        case4_array[index1] = case4_array[index2];
+        case4_array[index2] = temp;
+    }
+    return case4_array;
+}
+
+double time_bubble_sort(MyArray source_array, int case_number) {
+    // Deep copy so original array remains unsorted
+    MyArray test_array = source_array;
+    int n = test_array.get_length();
+
+    std::cout << "\nCase " << case_number << " bubble sort (Size " << n << ")" << std::endl;
+    std::chrono::high_resolution_clock::time_point begin_time = std::chrono::high_resolution_clock::now();
+    std::cout << "beginning time recorded." << std::endl;
+
+    test_array.bubble_sort();
+
+    std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "end time recorded." << std::endl;
+
+    std::chrono::duration<double, std::milli> duration = end_time - begin_time;
+    double total_time = duration.count();
+    std::cout << "total time: " << total_time << " ms" << std::endl;
+
+    if (test_array.isSorted(1, true)) {
+        std::cout << "verification: SORTED" << std::endl;
+    } else {
+        std::cout << "verification: FAILED" << std::endl;
+    }
+
+    return total_time;
+}
+
+double time_selection_sort(MyArray source_array, int case_number) {
+    // Deep copy so original array remains unsorted
+    MyArray test_array = source_array;
+    int n = test_array.get_length();
+
+    std::cout << "\nCase " << case_number << " selection sort (Size " << n << ")" << std::endl;
+    std::chrono::high_resolution_clock::time_point begin_time = std::chrono::high_resolution_clock::now();
+    std::cout << "beginning time recorded." << std::endl;
+
+    test_array.selection_sort();
+
+    std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "end time recorded." << std::endl;
+
+    std::chrono::duration<double, std::milli> duration = end_time - begin_time;
+    double total_time = duration.count();
+    std::cout << "total time: " << total_time << " ms" << std::endl;
+
+    if (test_array.isSorted(1, true)) {
+        std::cout << "verification: SORTED" << std::endl;
+    } else {
+        std::cout << "verification: FAILED" << std::endl;
+    }
+
+    return total_time;
+}
+
+double time_insertion_sort(MyArray source_array, int case_number) {
+    // Deep copy so original array remains unsorted
+    MyArray test_array = source_array;
+    int n = test_array.get_length();
+
+    std::cout << "\nCase " << case_number << " insertion sort (Size " << n << ")" << std::endl;
+    std::chrono::high_resolution_clock::time_point begin_time = std::chrono::high_resolution_clock::now();
+    std::cout << "beginning time recorded." << std::endl;
+
+    test_array.insertion_sort();
+
+    std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "end time recorded." << std::endl;
+
+    std::chrono::duration<double, std::milli> duration = end_time - begin_time;
+    double total_time = duration.count();
+    std::cout << "total time: " << total_time << " ms" << std::endl;
+
+    if (test_array.isSorted(1, true)) {
+        std::cout << "verification: SORTED" << std::endl;
+    } else {
+        std::cout << "verification: FAILED" << std::endl;
+    }
+
+    return total_time;
+}
+
+void run_all_benchmarks() {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    int sizes[4] = {100, 1000, 10000, 100000};
+    int total_sizes = 4;
+
+    for (int i = 0; i < total_sizes; i++) {
+        int n = sizes[i];
+
+        std::cout << "\n==========================================" << std::endl;
+        std::cout << "TESTING ARRAY SIZE: " << n << std::endl;
+        std::cout << "==========================================" << std::endl;
+
+        // Case 1: Random
+        MyArray case1_array = generate_case1_array(n);
+        double c1_bubble = time_bubble_sort(case1_array, 1);
+        double c1_selection = time_selection_sort(case1_array, 1);
+        double c1_insertion = time_insertion_sort(case1_array, 1);
+
+        // Case 2: Sorted
+        MyArray case2_array = generate_case2_array(n);
+        double c2_bubble = time_bubble_sort(case2_array, 2);
+        double c2_selection = time_selection_sort(case2_array, 2);
+        double c2_insertion = time_insertion_sort(case2_array, 2);
+
+        // Case 3: 90% Sorted
+        MyArray case3_array = generate_case3_array(n);
+        double c3_bubble = time_bubble_sort(case3_array, 3);
+        double c3_selection = time_selection_sort(case3_array, 3);
+        double c3_insertion = time_insertion_sort(case3_array, 3);
+
+        // Case 4: 50% Sorted
+        MyArray case4_array = generate_case4_array(n);
+        double c4_bubble = time_bubble_sort(case4_array, 4);
+        double c4_selection = time_selection_sort(case4_array, 4);
+        double c4_insertion = time_insertion_sort(case4_array, 4);
+
+        // Summary for spreadsheet
+        std::cout << "\nSummary for Size " << n << " (Milliseconds):" << std::endl;
+        std::cout << "Case,Bubble,Selection,Insertion" << std::endl;
+        std::cout << "Case 1," << c1_bubble << "," << c1_selection << "," << c1_insertion << std::endl;
+        std::cout << "Case 2," << c2_bubble << "," << c2_selection << "," << c2_insertion << std::endl;
+        std::cout << "Case 3," << c3_bubble << "," << c3_selection << "," << c3_insertion << std::endl;
+        std::cout << "Case 4," << c4_bubble << "," << c4_selection << "," << c4_insertion << std::endl;
+    }
+}
+
 int main() {
-    unitTest();
-    testExceptions(); // created with gemini
+    run_all_benchmarks();
+    // unitTest();
+    // testExceptions(); // created with gemini
     return 0;
 }

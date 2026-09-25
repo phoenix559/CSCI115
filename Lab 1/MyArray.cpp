@@ -193,14 +193,33 @@ int MyArray::count_values(int value) {
     return count;
 }
 void MyArray::insertion_sort() {
-    int step = 0;
-    bool done = false;
-    for (int i = 0; i < length - 1; i++) {
-        int j = i + 1;
+    int temp = 0;
+    for (int i = 1; i < length; i++){
+        int j = i;
+        while (j >= 1 && data[j] < data[j - 1] ) {
+            temp = data[j];
+            data[j] = data[j-1];
+            data[j-1] = temp;
+            j--;
+        }
     }
 }
 void MyArray::bubble_sort() {
-
+    bool done = false;
+    int j = 0;
+    int temp = 0;
+    while (!done) {
+        done = true;
+        for (int i = 0; i < length - 1 - j; i++) {
+            if (data[i] > data[i+1]) {
+                done = false;
+                temp = data [i+1];
+                data[i+1] = data[i];
+                data[i] = temp;
+            }
+        }
+        j++;
+    }
 }
 void MyArray::selection_sort()
 {
@@ -228,6 +247,27 @@ void MyArray::reverse() {
         right--;
     }
 }
+
+bool MyArray::isSorted (int direction, bool allow_duplicates) {
+    // direction = +1 if sorted smaller to larger, -1 if larger to smaller
+    if (length == 0||length == 1)
+        return true;
+    int i = 0;
+    bool sorted = true, sorting_condition = true;
+    while (i < length - 1 && sorted) {
+        if (allow_duplicates) // non descending order
+            sorting_condition = direction * data[i] <= direction * data[i + 1];
+        else // strictly ascending order
+            sorting_condition = direction * data[i] < direction * data[i + 1];
+
+        if (!sorting_condition) {
+            sorted = false;
+        }
+        i++;
+    }
+    return sorted;
+}
+
 
 MyArray MyArray::subarray(int start, int end) {
     if (start < 0 || end >= length || start > end) {
