@@ -10,7 +10,7 @@ void Lab5::swap(int &first, int &second) {
 }
 
 // ===== MERGE SORT =====
-void Lab5::merge_sort_starter() {
+void Lab5::merge_sort() {
     int low = 0;
     int high = length - 1;
     merge_sort(low, high);

@@ -14,7 +14,6 @@ private:
   int partition(int pivot, int low, int high);
   void swap(int &first, int &second);
   void insertion_sort(int low, int high);
-
   void quick_sort(int low, int high);
 public:
 
