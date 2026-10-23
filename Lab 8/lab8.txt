@@ -1,0 +1,21 @@
+Warm-up at the beginning of the lab (type of question that could be in the second midterm of the final)
+
+    Write the Delete function for a BST with an iterative function
+    Write the Delete function for a BST with a recursive function
+
+We consider a binary search tree.
+
+1. Implement a function that determines if a binary tree is a binary search tree (type of question that could be in the second midterm of the final)
+
+2. Implement a function to traverse the tree per level (see document provided on Canvas)
+
+From BST to AVL:
+
+3. Implement the rotation functions (rotate left, rotate right, left then right, right then left)
+
+4. We consider  this sequence of elements:
+
+    20,10,15:   Display the tree (per level) before and after the necessary rotations to make this tree balanced
+    10,5,1:   Display the tree (per level) before and after the necessary rotations to make this tree balanced
+    10, 20, 30: Display the tree (per level) before and after the necessary rotations to make this tree balanced
+    10, 20, 50: Display the tree (per level) before and after the necessary rotations to make this tree balanced
