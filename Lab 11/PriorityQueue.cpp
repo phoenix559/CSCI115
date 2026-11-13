@@ -23,7 +23,6 @@ void PriorityQueue::sift_up(int index) {
 	}
 }
 
-
 void PriorityQueue::sift_down(int index) {
 	int current = index;
 	bool still_sifting = true;
