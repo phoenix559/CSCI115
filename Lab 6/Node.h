@@ -4,6 +4,8 @@
 
 #ifndef CSCI115_NODE_H
 #define CSCI115_NODE_H
+using MyType = int;
+
 class Node {
 private:
     int data;
@@ -13,8 +15,8 @@ public:
     Node();
     Node(int data);
     ~Node();
-    int get_data() const;
-    void set_data(int arg_data);
+    MyType get_data() const;
+    void set_data(MyType arg_data);
     Node *get_next() const;
     void set_next(Node *arg_next);
     Node *get_prev() const;

@@ -6,7 +6,7 @@
 #define CSCI115_QUEUE_H
 #include "Node.h"
 
-class Queue {
+class EncoderQueue {
 private:
     Node* head;
     Node* tail;

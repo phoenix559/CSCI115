@@ -1,0 +1,9 @@
+add_executable(Project
+        main.cpp
+        Graph.h
+        Graph.cpp
+        Map.cpp
+        Map.h
+        Animal.cpp
+        Animal.h
+)
