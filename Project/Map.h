@@ -21,13 +21,15 @@ private:
     void clear();
 public:
     Map() = default;
-    Map(int col, int row, char* gird);
+    Map(int row, int col, char* gird = nullptr);
     ~Map();
     bool load_map (const std::string &filename);
-    char terrain (int c, int r);
+    char terrain (int r, int c);
     void update_character_locations(Animal* animal);
     //void display();
     void display(Animal** animals = nullptr, int num_animals = 0);
+    int get_row() const;
+    int get_col() const;
 };
 
 

@@ -8,7 +8,7 @@ Graph::Graph(int num_vertices)
 {
 	this->num_vertices = num_vertices;
 	Pointing = new List*[num_vertices];
-	for (int i = 0; i < num_vertices; i = i + 1)
+	for (int i = 0; i < num_vertices; i++)
 	{
 		Pointing[i] = new List();
 	}
@@ -16,7 +16,7 @@ Graph::Graph(int num_vertices)
 
 Graph::~Graph()
 {
-	for (int i = 0; i < num_vertices; i = i + 1)
+	for (int i = 0; i < num_vertices; i++)
 	{
 		delete Pointing[i];
 	}
@@ -61,7 +61,7 @@ int Graph::retrieve_edge(int u, int v)
 	return -1;
 }
 
-List* Graph::adjacent_vertices(int u)
+List* Graph::adjacent_vertices(int u) const
 {
 	if (u >= 0 && u < num_vertices)
 	{
@@ -127,56 +127,21 @@ void Graph::BFS(int start_vertex)
 	delete[] visited;
 }
 */
-int Graph::get_num_vertices()
-{
-	return num_vertices;
-}
+int Graph::get_num_vertices() const {return num_vertices;}
 
-void Graph::print_dijkstra_results(int source_vertex, int* distance, int* predecessor)
-{
-	std::cout << "\nDijkstra Results (Source = " << source_vertex << "):" << std::endl;
-
-	std::cout << "Vertex:      ";
-	for (int i = 0; i < num_vertices; i = i + 1)
-	{
-		std::cout << i << "\t";
-	}
-	std::cout << std::endl;
-
-	std::cout << "Distance:    ";
-	for (int i = 0; i < num_vertices; i = i + 1)
-	{
-		if (distance[i] == INT_MAX)
-		{
-			std::cout << "INF\t";
-		}
-		else
-		{
-			std::cout << distance[i] << "\t";
-		}
-	}
-	std::cout << std::endl;
-
-	std::cout << "Predecessor: ";
-	for (int i = 0; i < num_vertices; i = i + 1)
-	{
-		std::cout << predecessor[i] << "\t";
-	}
-	std::cout << std::endl;
-}
-
-void Graph::Dijkstra(int source_vertex)
+int* Graph::Dijkstra(int source_vertex)
 {
 	if (source_vertex < 0 || source_vertex >= num_vertices)
 	{
 		std::cout << "Invalid source vertex!" << std::endl;
-		return;
+		return nullptr;
 	}
 
 	int* distance = new int[num_vertices];
 	int* predecessor = new int[num_vertices];
 	bool* visited = new bool[num_vertices];
 	bool* in_queue = new bool[num_vertices];
+	bool path_found = true;
 
 	PriorityQueue pq(num_vertices);
 
@@ -215,7 +180,7 @@ void Graph::Dijkstra(int source_vertex)
 				int v = curr_edge->get_vertex_id();
 				int weight = curr_edge->get_weight();
 
-				if (visited[v] == false && distance[u] != INT_MAX)
+				if (visited[v] == false && distance[u] != INT_MAX && weight != INT_MAX && weight > 0)
 				{
 					int new_cost = distance[u] + weight;
 					if (new_cost < distance[v])
@@ -245,25 +210,25 @@ void Graph::Dijkstra(int source_vertex)
 	print_dijkstra_results(source_vertex, distance, predecessor);
 
 	delete[] distance;
-	delete[] predecessor;
+	//delete[] predecessor;
 	delete[] visited;
 	delete[] in_queue;
+	return predecessor;
 }
 
-void Graph::Dijkstra(int source_vertex, int destination_vertex)
+std::pair<bool,int*> Graph::Dijkstra(int source_vertex, int destination_vertex)
 {
 	if (source_vertex < 0 || source_vertex >= num_vertices ||
-		destination_vertex < 0 || destination_vertex >= num_vertices)
+	    destination_vertex < 0 || destination_vertex >= num_vertices)
 	{
 		std::cout << "Invalid source or destination vertex!" << std::endl;
-		return;
+		return {false,nullptr};
 	}
 
 	int* distance = new int[num_vertices];
 	int* predecessor = new int[num_vertices];
 	bool* visited = new bool[num_vertices];
 	bool* in_queue = new bool[num_vertices];
-
 	PriorityQueue pq(num_vertices);
 
 	for (int i = 0; i < num_vertices; i = i + 1)
@@ -308,7 +273,7 @@ void Graph::Dijkstra(int source_vertex, int destination_vertex)
 				int v = curr_edge->get_vertex_id();
 				int weight = curr_edge->get_weight();
 
-				if (visited[v] == false && distance[u] != INT_MAX)
+				if (visited[v] == false && distance[u] != INT_MAX && weight != INT_MAX && weight > 0)
 				{
 					int new_cost = distance[u] + weight;
 					if (new_cost < distance[v])
@@ -339,9 +304,10 @@ void Graph::Dijkstra(int source_vertex, int destination_vertex)
 	print_dijkstra_results(source_vertex, distance, predecessor);
 
 	delete[] distance;
-	delete[] predecessor;
+	//delete[] predecessor;
 	delete[] visited;
 	delete[] in_queue;
+	return {reached_destination, predecessor};
 }
 
 void Graph::Dijkstra(int source_vertex, int* destinations, int num_destinations)
@@ -357,10 +323,11 @@ void Graph::Dijkstra(int source_vertex, int* destinations, int num_destinations)
 	bool* visited = new bool[num_vertices];
 	bool* in_queue = new bool[num_vertices];
 	bool* is_target = new bool[num_vertices];
+	bool path_found = true;
 
 	PriorityQueue pq(num_vertices);
 
-	for (int i = 0; i < num_vertices; i = i + 1)
+	for (int i = 0; i < num_vertices; i ++)
 	{
 		distance[i] = INT_MAX;
 		predecessor[i] = -1;
@@ -370,13 +337,13 @@ void Graph::Dijkstra(int source_vertex, int* destinations, int num_destinations)
 	}
 
 	int remaining_targets = 0;
-	for (int i = 0; i < num_destinations; i = i + 1)
+	for (int i = 0; i < num_destinations; i++)
 	{
 		int d = destinations[i];
 		if (d >= 0 && d < num_vertices && is_target[d] == false)
 		{
 			is_target[d] = true;
-			remaining_targets = remaining_targets + 1;
+			remaining_targets++;
 		}
 	}
 
@@ -401,7 +368,7 @@ void Graph::Dijkstra(int source_vertex, int* destinations, int num_destinations)
 
 			if (is_target[u] == true)
 			{
-				remaining_targets = remaining_targets - 1;
+				remaining_targets --;
 			}
 
 			if (remaining_targets > 0)
@@ -414,7 +381,7 @@ void Graph::Dijkstra(int source_vertex, int* destinations, int num_destinations)
 					int v = curr_edge->get_vertex_id();
 					int weight = curr_edge->get_weight();
 
-					if (visited[v] == false && distance[u] != INT_MAX)
+					if (visited[v] == false && distance[u] != INT_MAX && weight != INT_MAX && weight > 0)
 					{
 						int new_cost = distance[u] + weight;
 						if (new_cost < distance[v])
@@ -450,4 +417,38 @@ void Graph::Dijkstra(int source_vertex, int* destinations, int num_destinations)
 	delete[] visited;
 	delete[] in_queue;
 	delete[] is_target;
+	
+}
+
+void Graph::print_dijkstra_results(int source_vertex, int* distance, int* predecessor)
+{
+	std::cout << "\nDijkstra Results (Source = " << source_vertex << "):" << std::endl;
+
+	std::cout << "Vertex:      ";
+	for (int i = 0; i < num_vertices; i = i + 1)
+	{
+		std::cout << i << "\t";
+	}
+	std::cout << std::endl;
+
+	std::cout << "Distance:    ";
+	for (int i = 0; i < num_vertices; i = i + 1)
+	{
+		if (distance[i] == INT_MAX)
+		{
+			std::cout << "INF\t";
+		}
+		else
+		{
+			std::cout << distance[i] << "\t";
+		}
+	}
+	std::cout << std::endl;
+
+	std::cout << "Predecessor: ";
+	for (int i = 0; i < num_vertices; i = i + 1)
+	{
+		std::cout << predecessor[i] << "\t";
+	}
+	std::cout << std::endl;
 }

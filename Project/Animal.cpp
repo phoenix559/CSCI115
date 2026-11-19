@@ -23,25 +23,25 @@ void Animal::set_cost_of_edges() {
     cost_of_edges[1][4] = 2; // Ocean    
     
     // From Forest               TO
-    cost_of_edges[0][0] = 6; // Mountain
-    cost_of_edges[0][1] = 2; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = 2; // Desert
-    cost_of_edges[0][4] = 5; // Ocean
+    cost_of_edges[2][0] = 6; // Mountain
+    cost_of_edges[2][1] = 2; // Plain
+    cost_of_edges[2][2] = 3; // Forest
+    cost_of_edges[2][3] = 2; // Desert
+    cost_of_edges[2][4] = 5; // Ocean
     
     // From Desert               To
-    cost_of_edges[1][0] = 10; // Mountain
-    cost_of_edges[1][1] = 2; // Plain
-    cost_of_edges[1][2] = 3; // Forest
-    cost_of_edges[1][3] = 2; // Desert
-    cost_of_edges[1][4] = 3; // Ocean    
+    cost_of_edges[3][0] = 10; // Mountain
+    cost_of_edges[3][1] = 2; // Plain
+    cost_of_edges[3][2] = 3; // Forest
+    cost_of_edges[3][3] = 2; // Desert
+    cost_of_edges[3][4] = 3; // Ocean    
 
     // From Ocean                 TO
-    cost_of_edges[0][0] = 10; // Mountain
-    cost_of_edges[0][1] = 3; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = 3; // Desert
-    cost_of_edges[0][4] = 1; // Ocean
+    cost_of_edges[4][0] = 10; // Mountain
+    cost_of_edges[4][1] = 3; // Plain
+    cost_of_edges[4][2] = 3; // Forest
+    cost_of_edges[4][3] = 3; // Desert
+    cost_of_edges[4][4] = 1; // Ocean
     
 
 }
@@ -61,8 +61,9 @@ int Animal::terrain_index(char terrain) {
         return -1;
 }
 
-Animal::Animal(char arg_type, int r, int c) {
+Animal::Animal(char arg_type, std::string arg_name, int r, int c) {
     type = arg_type;
+    name = arg_name;
     position = {r,c};
 }
 
@@ -80,6 +81,22 @@ void Animal::update_location(int r, int c) {
 
 char Animal::get_type() const {
     return type;
+}
+
+std::string Animal::get_name() const {
+    return name;
+}
+
+void Animal::set_name(std::string arg_name) {
+    name = arg_name;
+}
+
+char * Animal::get_impassable_terrain() const {
+    return impassable_terrain;
+}
+
+int Animal::get_impassable_terrain_length() const {
+    return impassable_terrain_length;
 }
 
 int Animal::get_cost_of_edge(char from, char to) {
@@ -110,34 +127,38 @@ void Monkey::set_cost_of_edges (){
     cost_of_edges[1][4] = INT_MAX; // Ocean    
     
     // From Forest               TO
-    cost_of_edges[0][0] = INT_MAX; // Mountain
-    cost_of_edges[0][1] = 2; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = 2; // Desert
-    cost_of_edges[0][4] = INT_MAX; // Ocean
+    cost_of_edges[2][0] = INT_MAX; // Mountain
+    cost_of_edges[2][1] = 2; // Plain
+    cost_of_edges[2][2] = 3; // Forest
+    cost_of_edges[2][3] = 2; // Desert
+    cost_of_edges[2][4] = INT_MAX; // Ocean
     
     // From Desert               To
-    cost_of_edges[1][0] = INT_MAX; // Mountain
-    cost_of_edges[1][1] = 2; // Plain
-    cost_of_edges[1][2] = 3; // Forest
-    cost_of_edges[1][3] = 2; // Desert
-    cost_of_edges[1][4] = INT_MAX; // Ocean    
+    cost_of_edges[3][0] = INT_MAX; // Mountain
+    cost_of_edges[3][1] = 2; // Plain
+    cost_of_edges[3][2] = 3; // Forest
+    cost_of_edges[3][3] = 2; // Desert
+    cost_of_edges[3][4] = INT_MAX; // Ocean    
 
     // From Ocean                 TO
-    cost_of_edges[0][0] = INT_MAX; // Mountain
-    cost_of_edges[0][1] = 3; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = 3; // Desert
-    cost_of_edges[0][4] = INT_MAX; // Ocean
+    cost_of_edges[4][0] = INT_MAX; // Mountain
+    cost_of_edges[4][1] = 3; // Plain
+    cost_of_edges[4][2] = 3; // Forest
+    cost_of_edges[4][3] = 3; // Desert
+    cost_of_edges[4][4] = INT_MAX; // Ocean
     
 }
 
-Monkey::Monkey():Animal('M') {
+Monkey::Monkey():Animal('M',"Monkey") {
     Monkey::set_cost_of_edges();
+    impassable_terrain_length = 2;
+    impassable_terrain = new char [impassable_terrain_length] {'^','~'};
 }
 
-Monkey::Monkey(int r, int c):Animal('M', r, c) {
+Monkey::Monkey(int r, int c):Animal('M',"Monkey", r, c) {
     Monkey::set_cost_of_edges();
+    impassable_terrain_length = 2;
+    impassable_terrain = new char [impassable_terrain_length] {'^','~'};
 }
 
 Monkey::~Monkey() {
@@ -164,34 +185,40 @@ void Bird::set_cost_of_edges (){
     cost_of_edges[1][4] = 2; // Ocean    
     
     // From Forest               TO
-    cost_of_edges[0][0] = 6; // Mountain
-    cost_of_edges[0][1] = 2; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = INT_MAX; // Desert
-    cost_of_edges[0][4] = 5; // Ocean
+    cost_of_edges[2][0] = 6; // Mountain
+    cost_of_edges[2][1] = 2; // Plain
+    cost_of_edges[2][2] = 3; // Forest
+    cost_of_edges[2][3] = INT_MAX; // Desert
+    cost_of_edges[2][4] = 5; // Ocean
     
     // From Desert               To
-    cost_of_edges[1][0] = 10; // Mountain
-    cost_of_edges[1][1] = 2; // Plain
-    cost_of_edges[1][2] = 3; // Forest
-    cost_of_edges[1][3] = INT_MAX; // Desert
-    cost_of_edges[1][4] = 3; // Ocean    
+    cost_of_edges[3][0] = 10; // Mountain
+    cost_of_edges[3][1] = 2; // Plain
+    cost_of_edges[3][2] = 3; // Forest
+    cost_of_edges[3][3] = INT_MAX; // Desert
+    cost_of_edges[3][4] = 3; // Ocean    
 
     // From Ocean                 TO
-    cost_of_edges[0][0] = 10; // Mountain
-    cost_of_edges[0][1] = 3; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = INT_MAX; // Desert
-    cost_of_edges[0][4] = 1; // Ocean
+    cost_of_edges[4][0] = 10; // Mountain
+    cost_of_edges[4][1] = 3; // Plain
+    cost_of_edges[4][2] = 3; // Forest
+    cost_of_edges[4][3] = INT_MAX; // Desert
+    cost_of_edges[4][4] = 1; // Ocean
     
 }
 
-Bird::Bird():Animal('B') {
-    Bird::set_cost_of_edges();
+Bird::Bird():Animal('B',"Bird") {
+    Bird::set_cost_of_edges();    
+    impassable_terrain_length = 1;
+    impassable_terrain = new char [impassable_terrain_length] {'.'};
+
 }
 
-Bird::Bird(int r, int c):Animal('B', r, c) {
+Bird::Bird(int r, int c):Animal('B',"Bird", r, c) {
     Bird::set_cost_of_edges();
+    impassable_terrain_length = 1;
+    impassable_terrain = new char [impassable_terrain_length] {'^','~'};
+
 }
 
 Bird::~Bird() {
@@ -218,34 +245,40 @@ void Frog::set_cost_of_edges (){
     cost_of_edges[1][4] = 2; // Ocean    
     
     // From Forest               TO
-    cost_of_edges[0][0] = INT_MAX; // Mountain
-    cost_of_edges[0][1] = 2; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = INT_MAX; // Desert
-    cost_of_edges[0][4] = 5; // Ocean
+    cost_of_edges[2][0] = INT_MAX; // Mountain
+    cost_of_edges[2][1] = 2; // Plain
+    cost_of_edges[2][2] = 3; // Forest
+    cost_of_edges[2][3] = INT_MAX; // Desert
+    cost_of_edges[2][4] = 5; // Ocean
     
     // From Desert               To
-    cost_of_edges[1][0] = INT_MAX; // Mountain
-    cost_of_edges[1][1] = 2; // Plain
-    cost_of_edges[1][2] = 3; // Forest
-    cost_of_edges[1][3] = INT_MAX; // Desert
-    cost_of_edges[1][4] = 3; // Ocean    
+    cost_of_edges[3][0] = INT_MAX; // Mountain
+    cost_of_edges[3][1] = 2; // Plain
+    cost_of_edges[3][2] = 3; // Forest
+    cost_of_edges[3][3] = INT_MAX; // Desert
+    cost_of_edges[3][4] = 3; // Ocean    
 
     // From Ocean                 TO
-    cost_of_edges[0][0] = INT_MAX; // Mountain
-    cost_of_edges[0][1] = 3; // Plain
-    cost_of_edges[0][2] = 3; // Forest
-    cost_of_edges[0][3] = INT_MAX; // Desert
-    cost_of_edges[0][4] = 1; // Ocean
+    cost_of_edges[4][0] = INT_MAX; // Mountain
+    cost_of_edges[4][1] = 3; // Plain
+    cost_of_edges[4][2] = 3; // Forest
+    cost_of_edges[4][3] = INT_MAX; // Desert
+    cost_of_edges[4][4] = 1; // Ocean
     
 }
 
-Frog::Frog():Animal('G') {
+Frog::Frog():Animal('G',"Frog") {
     Frog::set_cost_of_edges();
+    impassable_terrain_length = 2;
+    impassable_terrain = new char [impassable_terrain_length] {'^','.'};
+
 }
 
-Frog::Frog(int r, int c):Animal('G', r, c) {
+Frog::Frog(int r, int c):Animal('G', "Frog", r, c) {
     Frog::set_cost_of_edges();
+    impassable_terrain_length = 2;
+    impassable_terrain = new char [impassable_terrain_length] {'^','.'};
+
 }
 
 Frog::~Frog() {
@@ -273,34 +306,40 @@ void Fish::set_cost_of_edges (){
     cost_of_edges[1][4] = 2; // Ocean    
     
     // From Forest               TO
-    cost_of_edges[0][0] = INT_MAX; // Mountain
-    cost_of_edges[0][1] = INT_MAX; // Plain
-    cost_of_edges[0][2] = INT_MAX; // Forest
-    cost_of_edges[0][3] = INT_MAX; // Desert
-    cost_of_edges[0][4] = 5; // Ocean
+    cost_of_edges[2][0] = INT_MAX; // Mountain
+    cost_of_edges[2][1] = INT_MAX; // Plain
+    cost_of_edges[2][2] = INT_MAX; // Forest
+    cost_of_edges[2][3] = INT_MAX; // Desert
+    cost_of_edges[2][4] = 5; // Ocean
     
     // From Desert               To
-    cost_of_edges[1][0] = INT_MAX; // Mountain
-    cost_of_edges[1][1] = INT_MAX; // Plain
-    cost_of_edges[1][2] = INT_MAX; // Forest
-    cost_of_edges[1][3] = INT_MAX; // Desert
-    cost_of_edges[1][4] = 3; // Ocean    
+    cost_of_edges[3][0] = INT_MAX; // Mountain
+    cost_of_edges[3][1] = INT_MAX; // Plain
+    cost_of_edges[3][2] = INT_MAX; // Forest
+    cost_of_edges[3][3] = INT_MAX; // Desert
+    cost_of_edges[3][4] = 3; // Ocean    
 
     // From Ocean                 TO
-    cost_of_edges[0][0] = INT_MAX; // Mountain
-    cost_of_edges[0][1] = INT_MAX; // Plain
-    cost_of_edges[0][2] = INT_MAX; // Forest
-    cost_of_edges[0][3] = INT_MAX; // Desert
-    cost_of_edges[0][4] = 1; // Ocean
+    cost_of_edges[4][0] = INT_MAX; // Mountain
+    cost_of_edges[4][1] = INT_MAX; // Plain
+    cost_of_edges[4][2] = INT_MAX; // Forest
+    cost_of_edges[4][3] = INT_MAX; // Desert
+    cost_of_edges[4][4] = 1; // Ocean
     
 }
 
-Fish::Fish():Animal('F') {
+Fish::Fish():Animal('F',"Fish") {
     Fish::set_cost_of_edges();
+    impassable_terrain_length = 4;
+    impassable_terrain = new char [impassable_terrain_length] {'^','"','.',' '};
+
 }
 
-Fish::Fish(int r, int c):Animal('F', r, c) {
+Fish::Fish(int r, int c):Animal('F',"Fish", r, c) {
     Fish::set_cost_of_edges();
+    impassable_terrain_length = 4;
+    impassable_terrain = new char [impassable_terrain_length] {'^','~','.',' '};
+
 }
 
 Fish::~Fish() {

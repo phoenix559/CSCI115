@@ -1,6 +1,8 @@
 #ifndef CSCI115_GRAPH_H
 #define CSCI115_GRAPH_H
 
+#include <utility>
+
 #include "List.h"
 
 class Graph
@@ -13,15 +15,15 @@ public:
     void Add(int u, int v, int w = 1);
     void Remove(int u, int v);
     int retrieve_edge(int u, int v);
-    List* adjacent_vertices(int u);
+    List* adjacent_vertices(int u) const;
     void Print();
     //void BFS(int start_vertex);
 
-    int get_num_vertices();
+    int get_num_vertices() const;
    
 
-    void Dijkstra(int source_vertex);
-    void Dijkstra(int source_vertex, int destination_vertex);
+    int* Dijkstra(int source_vertex);
+    std::pair<bool,int*> Dijkstra(int source_vertex, int destination_vertex);
     void Dijkstra(int source_vertex, int* destinations, int num_destinations);
 
 private:

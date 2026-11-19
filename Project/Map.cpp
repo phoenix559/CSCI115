@@ -32,7 +32,7 @@ void Map::clear() {
     grid = nullptr;
 }
 
-Map::Map(int col, int row, char *gird) {
+Map::Map(int row, int col, char *gird) {
 }
 
 Map::~Map() {
@@ -116,7 +116,7 @@ bool Map::load_map(const std::string &filename) {
     return true;
 }
 
-char Map::terrain(int c, int r) {
+char Map::terrain(int r, int c) {
     return grid[r * col + c];
 }
 
@@ -205,3 +205,7 @@ void Map::display(Animal** animals, int num_animals) {
     }
     std::cout << "   ---------------------------------------------------------------" << std::endl;
 }
+
+int Map::get_row() const {return row;}
+
+int Map::get_col() const {return col;}
