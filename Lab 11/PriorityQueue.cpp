@@ -5,6 +5,11 @@
 #include "PriorityQueue.h"
 
 
+PQNode::PQNode(int vertex_id, int distance) {
+	this->vertex_id = vertex_id;
+	this->distance = distance;
+}
+
 void PriorityQueue::sift_up(int index) {
 	int current = index;
 	bool still_sifting = true;

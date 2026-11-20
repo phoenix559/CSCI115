@@ -207,7 +207,7 @@ int* Graph::Dijkstra(int source_vertex)
 		}
 	}
 
-	print_dijkstra_results(source_vertex, distance, predecessor);
+	//print_dijkstra_results(source_vertex, distance, predecessor);
 
 	delete[] distance;
 	//delete[] predecessor;

@@ -10,6 +10,7 @@
 struct PQNode {
     int vertex_id = 0;
     int distance = 0;
+    PQNode(int vertex_id = 0, int distance = 0);
 };
 
 class PriorityQueue {
